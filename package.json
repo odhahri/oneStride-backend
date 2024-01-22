@@ -1,0 +1,23 @@
+{
+  "name": "onestride-back",
+  "version": "1.0.0",
+  "description": "The oneStride web application boasts a robust and dynamic Node.js backend, serving as the powerhouse behind the seamless and efficient functionality of the platform. Designed to facilitate booking with unparalleled ease, the backend is meticulously crafted to offer a swift, reliable, and secure user experience.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/odhahri/oneStride-backend.git"
+  },
+  "keywords": [
+    "oneStride",
+    "backend"
+  ],
+  "author": "ODHAHRI",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/odhahri/oneStride-backend/issues"
+  },
+  "homepage": "https://github.com/odhahri/oneStride-backend#readme"
+}
