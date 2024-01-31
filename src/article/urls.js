@@ -1,6 +1,7 @@
-const express = require("express");
-const router = express.Router();
-const articleController = require("./controllers/article_crud");
+const express = require("express")
+const path = require("path")
+const router = express.Router()
+const articleController = require(path.join(__dirname,"controllers/article_crud"))
 
 // Get all articles
 router.get("/get-all-articles", articleController.getAllArticles);
