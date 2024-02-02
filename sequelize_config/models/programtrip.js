@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
   ProgramTrip.init(
     {
       programTripId: {
+        allowNull: false,
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,

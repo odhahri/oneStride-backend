@@ -1,14 +1,15 @@
 const path = require("path");
 const articleService = require("../../../src/article/services/article_service")
 const responseWrapper = require("../../../core/helpers/responseWrapper")
+const {ValidationError } = require('class-validator')
 
 const getAllArticles = async (req, res) => {
   try {
-    const articles = await articleService.getAllArticles();
+    const articles = await articleService.get_articles_service();
     return res.json(
       responseWrapper(
         articles,
-        "getAllArticles",
+        "get_articles_service",
         "Articles retrieved successfully",
         true
       )
@@ -18,7 +19,7 @@ const getAllArticles = async (req, res) => {
     return res
       .status(500)
       .json(
-        responseWrapper(null, "getAllArticles", "Internal Server Error", false)
+        responseWrapper(null, "get_articles_service", "Internal Server Error", false)
       );
   }
 };
@@ -27,11 +28,11 @@ const getArticleById = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const article = await articleService.getArticleById(id);
+    const article = await articleService.get_article_service(id);
     return res.json(
       responseWrapper(
         article,
-        "getArticleById",
+        "get_article_service",
         "Article retrieved successfully",
         true
       )
@@ -41,38 +42,37 @@ const getArticleById = async (req, res) => {
     return res
       .status(500)
       .json(
-        responseWrapper(null, "getArticleById", "Internal Server Error", false)
+        responseWrapper(null, "get_article_service", "Internal Server Error", false)
       );
   }
 };
 
 const createArticle = async (req, res) => {
   try {
-    const testData = {
-      label: "Test Article",
-      description: "This is a test article for validation.",
-      images: "https://example.com/test-image.jpg",
-      userId: 1,
-    };
-    const newArticle = articleService.createArticle(testData);
- 
+    const article_before_send=req.body
+    console.log("article_before_send: \n "+article_before_send+"\n");
+    const article = await articleService.create_article_service(req.body);
     return res
       .status(201)
       .json(
         responseWrapper(
-          newArticle,
-          "createArticle",
-          "Article created successfully",
+          article,
+          "create_article_service",
+          "article created successfully",
           true
         )
       );
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .json(
-        responseWrapper(null, "createArticle", "Internal Server Error", false)
+    if (Array.isArray(error) && error.every(e => e instanceof ValidationError)) {
+      return res.status(400).json(
+        responseWrapper(null, "create_article_service", error, false)
       );
+    }
+
+    return res.status(500).json(
+      responseWrapper(null, "create_article_service", "Internal Server Error", false)
+    );
   }
 };
 
@@ -80,19 +80,19 @@ const updateArticle = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const updatedArticle = await articleService.updateArticle(id, req.body);
+    const updatedArticle = await articleService.update_article_service(id, req.body);
     if (!updatedArticle) {
       return res
         .status(404)
         .json(
-          responseWrapper(null, "updateArticle", "Article not found", false)
+          responseWrapper(null, "update_article_service", "Article not found", false)
         );
     }
 
     return res.json(
       responseWrapper(
         updatedArticle,
-        "updateArticle",
+        "update_article_service",
         "Article updated successfully",
         true
       )
@@ -111,19 +111,19 @@ const deleteArticle = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const deletedArticle = await articleService.deleteArticle(id);
+    const deletedArticle = await articleService.delete_article_service(id);
     if (!deletedArticle) {
       return res
         .status(404)
         .json(
-          responseWrapper(null, "deleteArticle", "Article not found", false)
+          responseWrapper(null, "delete_article_service", "Article not found", false)
         );
     }
 
     return res.json(
       responseWrapper(
         deletedArticle,
-        "deleteArticle",
+        "delete_article_service",
         "Article deleted successfully",
         true
       )
@@ -142,11 +142,11 @@ const filterArticles = async (req, res) => {
   const { search } = req.query;
 
   try {
-    const filteredArticles = await articleService.filterArticles(search);
+    const filteredArticles = await articleService.filter_articles_service(search);
     return res.json(
       responseWrapper(
         filteredArticles,
-        "filterArticles",
+        "filter_articles_service",
         "Articles filtered successfully",
         true
       )
@@ -156,10 +156,25 @@ const filterArticles = async (req, res) => {
     return res
       .status(500)
       .json(
-        responseWrapper(null, "filterArticles", "Internal Server Error", false)
+        responseWrapper(null, "filter_articles_service", "Internal Server Error", false)
       );
   }
 };
+
+const getArticlesByUserId = async (req, res) => {
+  try {
+      const userId = req.query.userId;
+      const articles = await articleService.get_article_userid_service(userId);
+      return res.status(200).json(
+        responseWrapper(articles, "get_article_userid_service", "Article by user retreived successfully", true)
+      );
+  } catch (error) {
+    res.status(400).json(
+      responseWrapper(null, "get_article_userid_service", error, false)
+    );
+  }
+};
+
 
 module.exports = {
   getAllArticles,
@@ -168,4 +183,5 @@ module.exports = {
   updateArticle,
   deleteArticle,
   filterArticles,
+  getArticlesByUserId
 };

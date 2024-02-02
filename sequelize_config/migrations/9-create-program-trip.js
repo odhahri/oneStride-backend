@@ -2,30 +2,20 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Programs', {
-      id: {
+    await queryInterface.createTable('ProgramTrips', {
+      programTripId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       programId: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
-      destinationId: {
+      tripId: {
+        allowNull: false,
         type: Sequelize.INTEGER
-      },
-      label: {
-        type: Sequelize.STRING
-      },
-      description: {
-        type: Sequelize.TEXT
-      },
-      personPrice: {
-        type: Sequelize.FLOAT
-      },
-      images: {
-        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -38,6 +28,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Programs');
+    await queryInterface.dropTable('ProgramTrips');
   }
 };

@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   Article.init(
     {
       articleId: {
+        allowNull: false,
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -26,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       images: {
         type: DataTypes.STRING, // Assuming images are stored as URLs
+        allowNull: true,
       },
       userId: {
         type: DataTypes.INTEGER,

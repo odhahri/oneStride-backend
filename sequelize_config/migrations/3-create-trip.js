@@ -1,47 +1,58 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
+
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Trips', {
-      id: {
+      tripId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      tripId: {
-        type: Sequelize.INTEGER
-      },
       destTownId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Towns',
+          key: 'townId',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       departTownId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Towns',
+          key: 'townId',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       label: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       description: {
+        allowNull: false,
         type: Sequelize.TEXT
       },
       departureDate: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       comingDate: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       personPrice: {
+        allowNull: false,
         type: Sequelize.FLOAT
       },
       images: {
         type: Sequelize.STRING
       },
-      classes: {
-        type: Sequelize.STRING
-      },
-      places: {
-        type: Sequelize.INTEGER
-      },
+  
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

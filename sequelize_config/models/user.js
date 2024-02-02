@@ -18,26 +18,33 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
       },
       fname: {
+        allowNull: false,
         type: DataTypes.STRING,
       },
       lname: {
+        allowNull: false,
         type: DataTypes.STRING,
       },
       gender: {
+        allowNull: false,
         type: DataTypes.STRING,
       },
-      age: {
-        type: DataTypes.INTEGER,
+      bdate: {
+        allowNull: false,
+        type: DataTypes.DATE, // or DataTypes.STRING
       },
       phone: {
+        allowNull: false,
         type: DataTypes.STRING,
       },
-      username: {
+      username: {   
+        allowNull: false,
         type: DataTypes.STRING,
         unique: true,
         lowercase: true,
       },
       image: {
+        allowNull: true,
         type: DataTypes.STRING,
       },
       role: {

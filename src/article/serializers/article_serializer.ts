@@ -2,19 +2,20 @@ import { Expose } from "class-transformer";
 import { IsString, IsInt, IsOptional } from "class-validator";
 
 export class ArticleDTO {
-  @Expose()
+  @Expose({ name: "article_label" })
   @IsString()
   label: string | undefined;
 
-  @Expose()
+  @Expose({ name: "article_description" })
   @IsString()
   description: string | undefined;
 
-  @Expose()
+  @Expose({ name: "article_images" })
+  @IsOptional()
   @IsString()
-  images?: string;
+  images?: string | undefined;
 
-  @Expose()
+  @Expose({ name: "article_userId" })
   @IsInt()
   userId: number | undefined;
 }

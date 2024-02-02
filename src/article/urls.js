@@ -18,4 +18,10 @@ router.put("/update-article-by-id/:id", articleController.updateArticle);
 // Delete an article by ID
 router.delete("/delete-article-by-id/:id", articleController.deleteArticle);
 
+//Get Articles By UserId
+router.get("/get-article-by-userid", articleController.getArticlesByUserId);
+
+//Get Articles By Search 
+router.get("/filter-articles", articleController.filterArticles);
+
 module.exports = router;

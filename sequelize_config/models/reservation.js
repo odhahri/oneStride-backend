@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   Reservation.init(
     {
       reservationId: {
+        allowNull: false,
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -22,9 +23,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       programId: {
+        allowNull: true,
         type: DataTypes.INTEGER,
       },
       tripId: {
+        allowNull: true,
         type: DataTypes.INTEGER,
       },
     },

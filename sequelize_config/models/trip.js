@@ -5,16 +5,8 @@ module.exports = (sequelize, DataTypes) => {
   class Trip extends Model {
     static associate(models) {
       Trip.belongsToMany(models.Program, {
-        through: "ProgramTrip", // Junction table
+        through: "ProgramTrip", 
         foreignKey: "tripId",
-      });
-      Trip.belongsTo(models.Town, {
-        foreignKey: "departTownId",
-        as: "departureTown",
-      });
-      Trip.belongsTo(models.Town, {
-        foreignKey: "destTownId",
-        as: "destinationTown",
       });
       Trip.hasMany(models.Reservation, { foreignKey: "tripId" });
     }
@@ -23,52 +15,49 @@ module.exports = (sequelize, DataTypes) => {
   Trip.init(
     {
       tripId: {
+        allowNull: false,
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      departTownId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
       destTownId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        validate: {
-          // Custom validation to ensure destination town is different from departure town
-          notEqualDepartureTown(value) {
-            if (parseInt(value, 10) === parseInt(this.departTownId, 10)) {
-              throw new Error(
-                "Destination town must be different from departure town"
-              );
-            }
-          },
+        references: {
+          model: 'Town',
+          key: 'TownId'
+        }},
+        departTownId: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+          references: {
+            model: 'Town',
+            key: 'TownId'
+          }
         },
-      },
       label: {
+        allowNull: false,
         type: DataTypes.STRING,
       },
       description: {
+        allowNull: false,
         type: DataTypes.TEXT,
       },
       departureDate: {
+        allowNull: false,
         type: DataTypes.DATE,
       },
       comingDate: {
         type: DataTypes.DATE,
       },
       personPrice: {
+        allowNull: false,
         type: DataTypes.FLOAT,
       },
       images: {
         type: DataTypes.STRING,
-      },
-      classes: {
-        type: DataTypes.STRING,
-      },
-      places: {
-        type: DataTypes.INTEGER,
-      },
+        allowNull: true,
+      }
     },
     {
       sequelize,

@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   Reply.init(
     {
       replyId: {
+        allowNull: false,
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,

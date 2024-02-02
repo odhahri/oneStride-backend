@@ -1,12 +1,11 @@
-# Makefile
-
 .PHONY: compile-ts-files start
 
 migration:
 	sequelize init:migrations
 
 migrate:
-	sequelize db:migrate 
+	sequelize db:migrate:undo:all
+	sequelize db:migrate
 
 compile-ts-files:
 	tsc -p tsconfig.json
@@ -14,7 +13,4 @@ compile-ts-files:
 start:
 	nodemon
 
-run-all: compile-ts-files migration migrate start 
-
-
-
+run-all: compile-ts-files migration migrate start

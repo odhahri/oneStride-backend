@@ -2,14 +2,11 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Articles', {
-      id: {
+    await queryInterface.createTable('Services', {
+      serviceid: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      articleId: {
         type: Sequelize.INTEGER
       },
       label: {
@@ -18,11 +15,21 @@ module.exports = {
       description: {
         type: Sequelize.TEXT
       },
-      images: {
-        type: Sequelize.STRING
+      price: {
+        type: Sequelize.FLOAT
       },
-      userId: {
-        type: Sequelize.INTEGER
+      inclusionType: {
+        type: Sequelize.BOOLEAN
+      },
+      townId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Towns",
+          key: "townId",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       createdAt: {
         allowNull: false,
@@ -35,6 +42,8 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Articles');
+    // Drop the table
+    await queryInterface.dropTable('Services');
   }
+  
 };

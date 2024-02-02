@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         through: "ProgramTrip", // Junction table
         foreignKey: "programId",
       });
-      Program.hasMany(models.Service, { foreignKey: "programId" });
+      
       Program.hasMany(models.Reservation, { foreignKey: "programId" });
     }
   }
@@ -16,21 +16,26 @@ module.exports = (sequelize, DataTypes) => {
   Program.init(
     {
       programId: {
+        allowNull: false,
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
       label: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
       description: {
         type: DataTypes.TEXT,
+        allowNull: false,
       },
       personPrice: {
         type: DataTypes.FLOAT,
+        allowNull: false,
       },
       images: {
         type: DataTypes.STRING,
+        allowNull: true,
       },
     },
     {

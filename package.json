@@ -7,9 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "tsc -p tsconfig.json && node core/onestride.js",
     "build": "tsc -p tsconfig.json",
-    "watch:js": "node core/onestride.js"
-
-    
+    "watch:js": "node core/onestride.js",
+    "generate-migrations": "sequelize-auto-migrations"
   },
   "repository": {
     "type": "git",
