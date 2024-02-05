@@ -2,7 +2,7 @@ const path = require("path");
 const { Op  } = require("sequelize");
 const  db   = require("../../../sequelize_config/models");
 
-const { Program,ProgramTrip,Trip } = require("../../../sequelize_config/models");
+const { Program,ProgramTrip,Trip,ProgramService,Service } = require("../../../sequelize_config/models");
 const { plainToInstance } = require("class-transformer");
 const { validate } = require("class-validator");
 const { ProgramDTO } = require("../../../compiled/program/serializers/program_serializer");
@@ -14,6 +14,9 @@ const get_programs_service = async () => {
         {
           model: Trip,
           through: ProgramTrip,
+        },{
+          model: Service,
+          through: ProgramService,
         },
       ],
     });
@@ -29,6 +32,9 @@ const get_program_service = async (id) => {
         {
           model: Trip,
           through: ProgramTrip,
+        },{
+          model: Service,
+          through: ProgramService,
         },
       ],
     });
@@ -82,7 +88,7 @@ const create_program_service = async (data) => {
 
 
 const update_program_service = async (id, updatedData) => {
-  const { trips, ...programData } = updatedData;
+  const { services,trips, ...programData } = updatedData;
 
   try {
     const program = await Program.findByPk(id, {
@@ -90,29 +96,30 @@ const update_program_service = async (id, updatedData) => {
         {
           model: Trip,
           through: ProgramTrip,
+        },,{
+          model: Service,
+          through: ProgramService,
         },
       ],
     });
-
     if (!program) {
-      // Handle not found case
       return null;
     }
-
-    // Update program data
     await program.update(programData);
-
-    // Update associated trips
     if (trips && Array.isArray(trips)) {
       await program.setTrips(trips);
     }
-
-    // Refresh program data to get the updated associated trips
+    if (services && Array.isArray(services)) {
+      await program.setServices(services);
+    }
     const updatedProgram = await Program.findByPk(id, {
       include: [
         {
           model: Trip,
           through: ProgramTrip,
+        },{
+          model: Service,
+          through: ProgramService,
         },
       ],
     });
@@ -188,8 +195,10 @@ const get_programs_by_trip_towns_service = async (departTownId, destTownId) => {
   }
 };
 
-const assign_trip_to_program = async (programId, tripId) => {
+const assign_trip_to_program = async (data) => {
   try {
+    const programId = data.program_id;
+    const tripId = data.trip_id; 
     const programTrip = await ProgramTrip.create({
       programId: programId,
       tripId: tripId,
@@ -200,6 +209,20 @@ const assign_trip_to_program = async (programId, tripId) => {
   }
 };
 
+const assign_service_to_program = async (data) => {
+
+  try {
+    const programId = data.program_id;
+    const serviceId = data.service_id; 
+    const programService = await ProgramService.create({
+      programId: programId,
+      serviceId: serviceId,
+    });
+    return programService;
+  } catch (error) {
+    throw error;
+  }
+};
 
 module.exports = {
   get_programs_service,
@@ -209,5 +232,6 @@ module.exports = {
   delete_program_service,
   filter_programs_service,
   get_programs_by_trip_towns_service,
-  assign_trip_to_program
+  assign_trip_to_program,
+  assign_service_to_program
 };

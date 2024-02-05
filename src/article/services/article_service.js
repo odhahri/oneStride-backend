@@ -1,22 +1,48 @@
 const path = require("path")
 const {Op} = require("sequelize")
-const {Article} = require('../../../sequelize_config/models')
+const {Article,User,Reply} = require('../../../sequelize_config/models')
 const {plainToInstance} = require('class-transformer')
 const {validate} = require('class-validator')
 const {ArticleDTO} = require('../../../compiled/article/serializers/article_serializer')
 
-var get_articles_service = async () => {
-    try {
-        return await Article.findAll();
-    } catch (error) {
-        throw error;  
-    }
+const get_articles_service = async () => {
+  try {
+    const articles = await Article.findAll({
+      include: [
+        {
+          model: User, 
+      
+        },
+        {
+          model: Reply, 
+  
+        },
+      ],
+    });
+
+    // Manipulate the result as needed (if any additional processing is required)
+
+    return articles;
+  } catch (error) {
+    throw error;
+  }
 };
 
 
 
 const get_article_service = async (id) => {
-     return await Article.findByPk(id);
+    return await Article.findByPk(id,{
+      include: [
+        {
+          model: User, 
+      
+        },
+        {
+          model: Reply, 
+  
+        },
+      ],
+    });
 };
 
 

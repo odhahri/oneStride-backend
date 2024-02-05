@@ -176,6 +176,58 @@ const filterPrograms = async (req, res) => {
     return res.status(500).json({ error: 'Internal Server Error', success: false });
   }
 };
+const assignServicetoProgram = async (req, res) => {
+  try {
+    const result = await programService.assign_service_to_program(req.body);
+    return res
+      .status(201)
+      .json(
+        responseWrapper(
+          result,
+          "assign_service_to_program",
+          "Service assigned successfully to program",
+          true
+        )
+      );
+  } catch (error) {
+    console.error(error);
+    if (Array.isArray(error) && error.every(e => e instanceof ValidationError)) {
+      return res.status(400).json(
+        responseWrapper(null, "assign_service_to_program", error, false)
+      );
+    }
+
+    return res.status(500).json(
+      responseWrapper(null, "assign_service_to_program", "Internal Server Error", false)
+    );
+  }
+};
+const assignTriptoProgram = async (req, res) => {
+  try {
+    const result = await programService.assign_trip_to_program(req.body);
+    return res
+      .status(201)
+      .json(
+        responseWrapper(
+          result,
+          "assign_service_to_program",
+          "Service assigned successfully to program",
+          true
+        )
+      );
+  } catch (error) {
+    console.error(error);
+    if (Array.isArray(error) && error.every(e => e instanceof ValidationError)) {
+      return res.status(400).json(
+        responseWrapper(null, "assign_trip_to_program", error, false)
+      );
+    }
+
+    return res.status(500).json(
+      responseWrapper(null, "assign_trip_to_program", "Internal Server Error", false)
+    );
+  }
+};
 module.exports = {
   getAllPrograms,
   getProgramById,
@@ -183,5 +235,8 @@ module.exports = {
   updateProgram,
   deleteProgram,
   getProgramsByTripTowns,
-  filterPrograms
+  filterPrograms,
+  assignTriptoProgram,
+  assignServicetoProgram
+  
 };

@@ -1,20 +1,35 @@
 const path = require("path");
 const { Op } = require("sequelize");
-const { Reply } = require("../../../sequelize_config/models");
+const { Reply,User } = require("../../../sequelize_config/models");
 const { plainToInstance } = require("class-transformer");
 const { validate } = require("class-validator");
 const { ReplyDTO } = require("../../../compiled/reply/serializers/reply_serializer");
 
 const get_replies_service = async () => {
   try {
-    return await Reply.findAll();
+    const replies = await Reply.findAll({
+      include: [
+        {
+          model: User, 
+          attributes: ['username', 'image'], 
+        },
+      ],
+    });
+    return replies;
   } catch (error) {
     throw error;
   }
 };
 
 const get_reply_service = async (id) => {
-  return await Reply.findByPk(id);
+  return await Reply.findByPk(id,{
+    include: [
+      {
+        model: User, 
+        attributes: ['username', 'image'], 
+      },
+    ],
+  });
 };
 
 const create_reply_service = async (data) => {
@@ -32,7 +47,7 @@ const create_reply_service = async (data) => {
     throw error;
   }
 };
-
+//add serializer to update a reply 
 const update_reply_service = async (id, updatedData) => {
   const reply = await Reply.findByPk(id);
   await reply.update(updatedData);
@@ -65,4 +80,5 @@ module.exports = {
   update_reply_service,
   delete_reply_service,
   filter_replies_service,
+  
 };
